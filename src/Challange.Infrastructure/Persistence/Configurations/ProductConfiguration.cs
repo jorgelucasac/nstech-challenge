@@ -22,6 +22,8 @@ internal class ProductConfiguration : BaseEntityConfiguration<Product>
         builder.Property(x => x.AvailableQuantity)
             .IsRequired();
 
+        builder.HasIndex(x => x.Description);
+
         builder.HasData(
            new Product("Rice", 30m, 100),
            new Product("Beans", 5.90m, 200),
