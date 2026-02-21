@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -33,8 +34,12 @@ public static class DependencyInjection
         services.AddScoped<ITokenService, JwtTokenService>();
 
         var jwtSettingsSection = configuration.GetSection(nameof(JwtSettings));
-        services.AddOptionsWithValidateOnStart<JwtSettings>(nameof(JwtSettings));
-        var jwtSettings = jwtSettingsSection.Get<JwtSettings>() ?? throw new InvalidOperationException("JWT settings missing in configuration.");
+        services
+            .AddOptionsWithValidateOnStart<JwtSettings>()
+            .Bind(jwtSettingsSection)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        var jwtSettings = jwtSettingsSection.Get<JwtSettings>()!;
 
         var jwtKey = jwtSettings.Key;
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
@@ -60,8 +65,20 @@ public static class DependencyInjection
 
     private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(connectionString, sql =>
+            {
+                sql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+                sql.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorCodesToAdd: null);
+
+                options.EnableDetailedErrors();
+                options.EnableSensitiveDataLogging();
+                options.LogTo(Console.WriteLine, LogLevel.Information);
+            }));
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();

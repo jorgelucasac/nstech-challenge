@@ -15,5 +15,5 @@ public class JwtSettings
 
     [Required(ErrorMessage = "JWT expiration time is required.")]
     [Range(1, int.MaxValue, ErrorMessage = "JWT expiration time must be greater than 0.")]
-    public int ExpireHours { get; set; }
+    public int ExpireMinutes { get; set; }
 }

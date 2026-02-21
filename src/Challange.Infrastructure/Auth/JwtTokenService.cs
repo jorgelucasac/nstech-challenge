@@ -17,7 +17,7 @@ public class JwtTokenService(IOptions<JwtSettings> options) : ITokenService
         var key = _jwtSettings.Key;
         var issuer = _jwtSettings.Issuer;
         var audience = _jwtSettings.Audience;
-        var expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpireHours);
+        var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpireMinutes);
 
         var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256);
 
