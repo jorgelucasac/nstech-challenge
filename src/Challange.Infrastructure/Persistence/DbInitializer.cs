@@ -1,3 +1,5 @@
+using Challange.Domain.Entities;
+using Challange.Infrastructure.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +11,30 @@ public static class DbInitializer
     {
         using var scope = serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await dbContext.Database.MigrateAsync(cancellationToken);
+
+        try
+        {
+            await dbContext.Database.EnsureDeletedAsync(cancellationToken);
+            await dbContext.Database.MigrateAsync(cancellationToken);
+            await SeedDataAsync(dbContext, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"An error occurred while creating the database: {e.Message}");
+        }
+    }
+
+    private static async Task SeedDataAsync(AppDbContext dbContext, CancellationToken cancellationToken = default)
+    {
+        // Check if the database is already seeded
+        if (await dbContext.Users.AnyAsync(cancellationToken))
+            return;
+
+        dbContext.Products.Add(new Product("Rice", 30m, 100));
+        dbContext.Products.Add(new Product("Beans", 5.90m, 200));
+        dbContext.Products.Add(new Product("Sugar", 10.50m, 500));
+
+        dbContext.Users.Add(new User("admin", new BCryptPasswordHasher().HashPassword("admin")));
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

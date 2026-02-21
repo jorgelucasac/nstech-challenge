@@ -1,4 +1,5 @@
 ﻿using Challange.Domain.Entities;
+using Challange.Infrastructure.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
