@@ -1,4 +1,4 @@
-using OrderService.Infrastructure;
+using Challange.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
