@@ -1,7 +1,7 @@
 ﻿using Challange.Domain.Constants;
 using FluentValidation;
 
-namespace Challange.Application.Commands.Auth.GenerateToken;
+namespace Challange.Application.Features.Commands.Auth.GenerateToken;
 
 public sealed class GenerateTokenCommandValidator : AbstractValidator<GenerateTokenCommand>
 {

@@ -23,7 +23,7 @@ public class Result<T>
 
     public static Result<T> NotFound(string message) => Failure(404, message);
 
-    public static Result<T> BadRequest(string message) => Failure(400, message);
+    public static Result<T> Validation(string message) => Failure(400, message);
 
     public static Result<T> Validation(string message, List<KeyValuePair<string, string>> details) => Failure(422, message, details);
 

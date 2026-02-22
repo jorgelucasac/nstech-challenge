@@ -1,18 +1,17 @@
 ﻿using Challange.Application.Commons;
 using Challange.Application.Contracts.Repositories;
 using Challange.Application.Contracts.Services;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Challange.Application.Commands.Auth.GenerateToken;
+namespace Challange.Application.Features.Commands.Auth.GenerateToken;
 
 public sealed class GenerateTokenCommandHandler(
     IUserRepository userRepository,
     IPasswordHasherService passwordHasher,
     ITokenService tokenService,
-    ILogger<GenerateTokenCommandHandler> logger) : IRequestHandler<GenerateTokenCommand, Result<GenerateTokenResponse>>
+    ILogger<GenerateTokenCommandHandler> logger) : BaseHandler<GenerateTokenCommand, GenerateTokenResponse>(logger)
 {
-    public async Task<Result<GenerateTokenResponse>> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
+    public override async Task<Result<GenerateTokenResponse>> HandleAsync(GenerateTokenCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Generating token for login {Login}", request.Login);
 
