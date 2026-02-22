@@ -7,7 +7,8 @@ namespace Challange.Api.Controllers;
 
 [ApiController]
 [ApiVersion(1)]
-[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType<ApiErrorResponse>(StatusCodes.Status500InternalServerError)]
 public abstract class ControllerMain : ControllerBase
 {
     protected IActionResult ErrorResponse(Error error)
