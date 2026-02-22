@@ -1,6 +1,7 @@
 ﻿using Challange.Application.Commons;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Challange.Application.Behaviors;
 
@@ -9,9 +10,13 @@ public sealed class ValidationBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
 
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-        => _validators = validators;
+    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidationBehavior<TRequest, TResponse>> logger)
+    {
+        _validators = validators;
+        _logger = logger;
+    }
 
     public async Task<TResponse> Handle(
         TRequest request,
@@ -34,6 +39,8 @@ public sealed class ValidationBehavior<TRequest, TResponse>
         var details = failures
             .Select(f => new KeyValuePair<string, string>(f.PropertyName, f.ErrorMessage))
             .ToList();
+
+        _logger.LogWarning("Validation failed for {RequestType}: {@Details}", typeof(TRequest).Name, details);
 
         return CreateValidationResponse(details);
     }
