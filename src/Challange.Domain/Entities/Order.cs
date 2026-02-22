@@ -27,6 +27,10 @@ public class Order : BaseEntity
         RecalculateTotal();
     }
 
+    private Order()
+    {
+    }
+
     public bool CanConfirm() => Status is OrderStatus.Placed or OrderStatus.Confirmed;
 
     public bool TryConfirm()

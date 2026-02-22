@@ -12,7 +12,7 @@ public class ApiErrorResponse
         return new ApiErrorResponse
         {
             Message = error.Message,
-            Errors = error.Errors
+            Errors = error.Details
         };
     }
 }

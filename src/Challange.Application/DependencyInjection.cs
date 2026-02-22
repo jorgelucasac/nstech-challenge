@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Challange.Application.Behaviors;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,12 @@ public static class DependencyInjection
     {
         var assembly = typeof(DependencyInjection).Assembly;
         services.AddMediatR(cfg => cfg.AsScoped(), assembly);
+
+        services.AddMediatR(cfg =>
+        {
+            cfg.AsScoped();
+        }, assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddValidatorsFromAssembly(assembly);
         return services;
     }

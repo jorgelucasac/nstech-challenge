@@ -23,4 +23,8 @@ public class OrderItem : BaseEntity
         UnitPrice = unitPrice;
         Quantity = quantity;
     }
+
+    private OrderItem()
+    {
+    }
 }

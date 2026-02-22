@@ -8,14 +8,14 @@ public class Error
         Message = message;
     }
 
-    public Error(int code, string message, List<KeyValuePair<string, string>> errors)
+    public Error(int code, string message, List<KeyValuePair<string, string>> details)
     {
         Code = code;
         Message = message;
-        Errors = errors;
+        Details = details;
     }
 
     public int Code { get; }
     public string Message { get; } = string.Empty;
-    public List<KeyValuePair<string, string>> Errors { get; } = new List<KeyValuePair<string, string>>();
+    public List<KeyValuePair<string, string>> Details { get; } = new List<KeyValuePair<string, string>>();
 }

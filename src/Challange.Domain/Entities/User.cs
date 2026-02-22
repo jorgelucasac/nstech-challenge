@@ -28,4 +28,8 @@ public class User : BaseEntity
         PasswordHash = passwordHash;
         UpdateTimestamps();
     }
+
+    private User()
+    {
+    }
 }

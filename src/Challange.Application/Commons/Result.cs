@@ -17,7 +17,7 @@ public class Result<T>
 
     public static Result<T> Failure(Error error) => new(false, default!, error);
 
-    public static Result<T> Failure(int code, string message, List<KeyValuePair<string, string>> errors) => new(false, default!, new Error(code, message, errors));
+    public static Result<T> Failure(int code, string message, List<KeyValuePair<string, string>> details) => new(false, default!, new Error(code, message, details));
 
     public static Result<T> Failure(int code, string message) => new(false, default!, new Error(code, message));
 
@@ -25,7 +25,7 @@ public class Result<T>
 
     public static Result<T> BadRequest(string message) => Failure(400, message);
 
-    public static Result<T> Validation(string message, List<KeyValuePair<string, string>> errors) => Failure(422, message, errors);
+    public static Result<T> Validation(string message, List<KeyValuePair<string, string>> details) => Failure(422, message, details);
 
     public static Result<T> Unauthorized(string message) => Failure(401, message);
 }
