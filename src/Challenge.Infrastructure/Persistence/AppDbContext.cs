@@ -1,0 +1,21 @@
+using Challenge.Domain.Entities;
+using Challenge.Infrastructure.Persistence.Configurations;
+using Microsoft.EntityFrameworkCore;
+
+namespace Challenge.Infrastructure.Persistence;
+
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+{
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<User> Users => Set<User>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderConfiguration).Assembly);
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.HasPostgresExtension("citext");
+    }
+}

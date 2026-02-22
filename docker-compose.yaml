@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: nstech-challange-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: nstech
+      POSTGRES_PASSWORD: nstech123
+      POSTGRES_DB: nstech-challange
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nstech"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nstech-webapi
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=nstech-challange;Username=nstech;Password=nstech123;"
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
