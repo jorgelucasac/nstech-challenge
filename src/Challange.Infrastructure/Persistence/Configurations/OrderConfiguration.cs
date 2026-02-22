@@ -27,6 +27,7 @@ internal class OrderConfiguration : BaseEntityConfiguration<Order>
 
         builder.HasIndex(x => x.Status);
         builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.CreatedAt);
 
         builder.HasMany(x => x.Items)
             .WithOne()
