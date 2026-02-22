@@ -11,6 +11,7 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
         var normalized = login.ToUpperInvariant();
         return await dbContext
             .Users
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.NormalizedLogin == normalized, cancellationToken);
     }
 
