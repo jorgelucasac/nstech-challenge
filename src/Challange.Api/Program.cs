@@ -13,6 +13,7 @@ builder.Services.AddSwaggerCustom();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Host.AddSerilog();
 
 var app = builder.Build();
 

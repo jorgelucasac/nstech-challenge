@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace Challange.Infrastructure;
@@ -27,6 +29,18 @@ public static class DependencyInjection
     private static void AddPasswordHashing(IServiceCollection services)
     {
         services.AddScoped<IPasswordHasherService, BCryptPasswordHasher>();
+    }
+
+    public static void AddSerilog(this IHostBuilder host)
+    {
+        host.UseSerilog((context, services, configuration) =>
+        {
+            configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Application", "Fundo.WebApi")
+                .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName);
+        });
     }
 
     private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)

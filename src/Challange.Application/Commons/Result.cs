@@ -37,4 +37,6 @@ public class Result<T> : Result
     {
         Value = value;
     }
+
+    public static Result<T> Validation(string message, List<KeyValuePair<string, string>> details) => Failure<T>(422, message, details);
 }

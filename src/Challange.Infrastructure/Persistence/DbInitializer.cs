@@ -14,9 +14,19 @@ public static class DbInitializer
 
         try
         {
-            await dbContext.Database.EnsureDeletedAsync(cancellationToken);
-            await dbContext.Database.MigrateAsync(cancellationToken);
-            await SeedDataAsync(dbContext, cancellationToken);
+            //await dbContext.Database.EnsureDeletedAsync(cancellationToken);
+
+            //create the database if it doesn't exist and apply any pending migrations
+            if (!await dbContext.Database.CanConnectAsync(cancellationToken))
+            {
+                await dbContext.Database.EnsureCreatedAsync(cancellationToken);
+                await SeedDataAsync(dbContext, cancellationToken);
+            }
+            else
+            {
+                Console.WriteLine("Applying pending migrations...");
+                await dbContext.Database.MigrateAsync(cancellationToken);
+            }
         }
         catch (Exception e)
         {
@@ -34,7 +44,7 @@ public static class DbInitializer
         dbContext.Products.Add(new Product("Beans", 5.90m, 200));
         dbContext.Products.Add(new Product("Sugar", 10.50m, 500));
 
-        dbContext.Users.Add(new User("admin", new BCryptPasswordHasher().HashPassword("admin")));
+        dbContext.Users.Add(new User("admin", new BCryptPasswordHasher().HashPassword("admin01")));
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
