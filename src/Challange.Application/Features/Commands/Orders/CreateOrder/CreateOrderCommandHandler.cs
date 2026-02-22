@@ -48,6 +48,6 @@ public sealed class CreateOrderCommandHandler(
 
         logger.LogInformation("Order {OrderId} created successfully", order.Id);
         var itemsResponse = order.Items.Select(i => new OrderItemResponse(i.ProductId, i.UnitPrice, i.Quantity, i.Subtotal)).ToList();
-        return Result<OrderResponse>.Success(new OrderResponse(order.Id, order.UserId, order.Status, order.Currency, order.Total, order.CreatedAt.LocalDateTime, itemsResponse));
+        return Result.Success(new OrderResponse(order.Id, order.UserId, order.Status, order.Currency, order.Total, order.CreatedAt.LocalDateTime, itemsResponse));
     }
 }

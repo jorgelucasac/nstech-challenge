@@ -18,8 +18,4 @@
 		<ProjectReference Include="..\Challange.Domain\Challange.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Features\Queries\" />
-	</ItemGroup>
-
 </Project>

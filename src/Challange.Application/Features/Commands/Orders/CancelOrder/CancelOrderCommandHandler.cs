@@ -1,7 +1,6 @@
 ﻿using Challange.Application.Commons;
 using Challange.Application.Contracts.Repositories;
 using Challange.Domain.Enums;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Challange.Application.Features.Commands.Orders.CancelOrder;
@@ -10,9 +9,9 @@ public sealed class CancelOrderCommandHandler(
     IOrderRepository orderRepository,
     IProductRepository productRepository,
     IUnitOfWork unitOfWork,
-    ILogger<CancelOrderCommandHandler> logger) : IRequestHandler<CancelOrderCommand, Result<OrderResponse>>
+    ILogger<CancelOrderCommandHandler> logger) : BaseHandler<CancelOrderCommand, OrderResponse>(logger)
 {
-    public async Task<Result<OrderResponse>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+    public override async Task<Result<OrderResponse>> HandleAsync(CancelOrderCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Canceling order {OrderId}", request.OrderId);
 
