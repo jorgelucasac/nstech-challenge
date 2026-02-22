@@ -19,6 +19,7 @@ var app = builder.Build();
 
 await DbInitializer.ApplyMigrationsAsync(app.Services, app.Lifetime.ApplicationStopping);
 app.UseSwaggerCustom();
+app.UseCustomMiddleware();
 
 app.UseHttpsRedirection();
 
@@ -26,4 +27,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.RunAsync(app.Lifetime.ApplicationStopping);
+await app.RunAsync();
