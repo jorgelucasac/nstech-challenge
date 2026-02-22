@@ -1,4 +1,5 @@
-﻿using Challange.Domain.Entities;
+﻿using Challange.Domain.Constants;
+using Challange.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +13,7 @@ internal class ProductConfiguration : BaseEntityConfiguration<Product>
 
         builder.Property(x => x.Description)
             .HasColumnType("CITEXT")
-            .HasMaxLength(200)
+            .HasMaxLength(ProductConstants.MaxDescriptionLength)
             .IsRequired();
 
         builder.Property(x => x.UnitPrice)

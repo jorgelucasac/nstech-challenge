@@ -1,5 +1,5 @@
-﻿using Challange.Domain.Entities;
-using Challange.Infrastructure.Auth;
+﻿using Challange.Domain.Constants;
+using Challange.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,15 +12,15 @@ internal class UserConfiguration : BaseEntityConfiguration<User>
         builder.ToTable("Users");
 
         builder.Property(x => x.Login)
-            .HasMaxLength(100)
+            .HasMaxLength(UserConstants.MaxLoginLength)
             .IsRequired();
 
         builder.Property(x => x.NormalizedLogin)
-            .HasMaxLength(100)
+            .HasMaxLength(UserConstants.MaxLoginLength)
             .IsRequired();
 
         builder.Property(x => x.PasswordHash)
-            .HasMaxLength(300)
+            .HasMaxLength(UserConstants.MaxPasswordHashLength)
             .IsRequired();
 
         builder.HasIndex(x => x.NormalizedLogin).IsUnique();
