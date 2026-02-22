@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Asp.Versioning.ApiExplorer;
+using Microsoft.OpenApi.Models;
 
 namespace Challange.Api.Extensions.Swagger;
 
@@ -49,7 +50,16 @@ public static class SwaggerExtensions
 
     public static void UseSwaggerCustom(this WebApplication app)
     {
+        var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(options =>
+        {
+            foreach (var description in provider.ApiVersionDescriptions)
+            {
+                options.SwaggerEndpoint(
+                    $"/swagger/{description.GroupName}/swagger.json",
+                    description.GroupName.ToUpperInvariant());
+            }
+        });
     }
 }
