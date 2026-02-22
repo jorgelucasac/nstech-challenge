@@ -22,7 +22,7 @@ public class RegisterUserCommandHandler(
         if (alreadyExists)
         {
             logger.LogWarning("User with login {Login} already exists", request.Login);
-            return Result<RegisterUserResponse>.Validation("User with this login already exists");
+            return Result.Validation<RegisterUserResponse>("User with this login already exists");
         }
 
         var hash = passwordHasher.HashPassword(request.Password);
@@ -32,6 +32,6 @@ public class RegisterUserCommandHandler(
         await unitOfWork.CommitAsync(cancellationToken);
 
         logger.LogInformation("User {Login} registered with id {UserId}", user.Login, user.Id);
-        return Result<RegisterUserResponse>.Success(new RegisterUserResponse(user.Id, user.Login));
+        return Result.Success(new RegisterUserResponse(user.Id, user.Login));
     }
 }

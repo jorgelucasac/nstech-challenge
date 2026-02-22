@@ -13,18 +13,24 @@ public class Order : BaseEntity
     public List<OrderItem> Items { get; private set; } = [];
     public User? User { get; private set; }
 
-    public Order(Guid userId, string currency, IEnumerable<OrderItem> items) : base()
+    public Order(Guid userId, string currency) : base()
     {
         DomainException.ThrowIf(userId == Guid.Empty, "User ID cannot be empty.");
         DomainException.ThrowIf(string.IsNullOrWhiteSpace(currency), "Currency cannot be empty.");
         DomainException.ThrowIf(currency.Length != OrderConstants.CurrencyLength, $"Currency must be {OrderConstants.CurrencyLength} characters long.");
-        DomainException.ThrowIf(items == null || !items.Any(), "Order must have at least one item.");
 
         UserId = userId;
         Currency = currency.ToUpperInvariant();
         Status = OrderStatus.Placed;
-        Items = items!.ToList();
+        Items = [];
+    }
+
+    public void AddItems(IEnumerable<OrderItem> items)
+    {
+        DomainException.ThrowIf(items == null || !items.Any(), "Order must have at least one item.");
+        Items.AddRange(items!);
         RecalculateTotal();
+        UpdateTimestamps();
     }
 
     private Order()

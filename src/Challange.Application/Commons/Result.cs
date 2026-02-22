@@ -1,31 +1,40 @@
 ﻿namespace Challange.Application.Commons;
 
-public class Result<T>
+public class Result
 {
-    public bool IsSuccess { get; }
-    public T Value { get; }
-    public Error Error { get; }
-
-    private Result(bool isSuccess, T value, Error error)
+    public Result(bool isSuccess, Error error)
     {
         IsSuccess = isSuccess;
-        Value = value;
         Error = error;
     }
 
-    public static Result<T> Success(T value) => new(true, value, null);
+    public bool IsSuccess { get; }
+    public Error Error { get; }
 
-    public static Result<T> Failure(Error error) => new(false, default!, error);
+    public static Result<T> Success<T>(T value) => new(true, value, null);
 
-    public static Result<T> Failure(int code, string message, List<KeyValuePair<string, string>> details) => new(false, default!, new Error(code, message, details));
+    public static Result<T> Failure<T>(Error error) => new(false, default!, error);
 
-    public static Result<T> Failure(int code, string message) => new(false, default!, new Error(code, message));
+    public static Result<T> Failure<T>(int code, string message, List<KeyValuePair<string, string>> details) => new(false, default!, new Error(code, message, details));
 
-    public static Result<T> NotFound(string message) => Failure(404, message);
+    public static Result<T> Failure<T>(int code, string message) => new(false, default!, new Error(code, message));
 
-    public static Result<T> Validation(string message) => Failure(400, message);
+    public static Result<T> NotFound<T>(string message) => Failure<T>(404, message);
 
-    public static Result<T> Validation(string message, List<KeyValuePair<string, string>> details) => Failure(422, message, details);
+    public static Result<T> Validation<T>(string message) => Failure<T>(400, message);
 
-    public static Result<T> Unauthorized(string message) => Failure(401, message);
+    public static Result<T> Validation<T>(string message, List<KeyValuePair<string, string>> details) => Failure<T>(422, message, details);
+
+    public static Result<T> Unauthorized<T>(string message) => Failure<T>(401, message);
+}
+
+public class Result<T> : Result
+{
+    public T Value { get; }
+
+    internal Result(bool isSuccess, T value, Error error)
+        : base(isSuccess, error)
+    {
+        Value = value;
+    }
 }

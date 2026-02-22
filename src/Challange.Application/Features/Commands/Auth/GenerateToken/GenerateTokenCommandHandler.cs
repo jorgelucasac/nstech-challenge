@@ -18,19 +18,19 @@ public sealed class GenerateTokenCommandHandler(
         var user = await userRepository.GetByLoginAsync(request.Login, cancellationToken);
         if (user is null || !user.IsActive)
         {
-            return Result<GenerateTokenResponse>.Unauthorized("Invalid credentials.");
+            return Result.Unauthorized<GenerateTokenResponse>("Invalid credentials.");
         }
 
         var isValid = passwordHasher.VerifyPassword(request.Password, user.PasswordHash);
         if (!isValid)
         {
             logger.LogWarning("GenerateToken failed due to invalid credentials for login {Login}", request.Login);
-            return Result<GenerateTokenResponse>.Unauthorized("Invalid credentials.");
+            return Result.Unauthorized<GenerateTokenResponse>("Invalid credentials.");
         }
 
         var token = tokenService.GenerateToken(user.Id, user.Login);
         var response = new GenerateTokenResponse(token.AccessToken, token.ExpiresAtUtc);
 
-        return Result<GenerateTokenResponse>.Success(response);
+        return Result.Success(response);
     }
 }
