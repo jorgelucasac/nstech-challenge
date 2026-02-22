@@ -1,3 +1,4 @@
+using Challange.Domain.Constants;
 using Challange.Domain.Exceptions;
 
 namespace Challange.Domain.Entities;
@@ -11,7 +12,9 @@ public class User : BaseEntity
     public User(string login, string passwordHash) : base()
     {
         DomainException.ThrowIf(string.IsNullOrWhiteSpace(login), "Login cannot be empty.");
+        DomainException.ThrowIf(login.Length < UserConstants.MinLoginLength || login.Length > UserConstants.MaxLoginLength, $"Login must be between {UserConstants.MinLoginLength} and {UserConstants.MaxLoginLength} characters.");
         DomainException.ThrowIf(string.IsNullOrWhiteSpace(passwordHash), "Password hash cannot be empty.");
+        DomainException.ThrowIf(passwordHash.Length > UserConstants.MaxPasswordHashLength, $"Password hash must not exceed {UserConstants.MaxPasswordHashLength} characters.");
 
         Login = login;
         NormalizedLogin = login.ToUpperInvariant();
@@ -25,7 +28,4 @@ public class User : BaseEntity
         PasswordHash = passwordHash;
         UpdateTimestamps();
     }
-
-    private User()
-    { }
 }

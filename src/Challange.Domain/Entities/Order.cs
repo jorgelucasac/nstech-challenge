@@ -1,3 +1,4 @@
+using Challange.Domain.Constants;
 using Challange.Domain.Enums;
 using Challange.Domain.Exceptions;
 
@@ -16,6 +17,7 @@ public class Order : BaseEntity
     {
         DomainException.ThrowIf(userId == Guid.Empty, "User ID cannot be empty.");
         DomainException.ThrowIf(string.IsNullOrWhiteSpace(currency), "Currency cannot be empty.");
+        DomainException.ThrowIf(currency.Length != OrderConstants.CurrencyLength, $"Currency must be {OrderConstants.CurrencyLength} characters long.");
         DomainException.ThrowIf(items == null || !items.Any(), "Order must have at least one item.");
 
         UserId = userId;
@@ -64,7 +66,4 @@ public class Order : BaseEntity
     }
 
     public void RecalculateTotal() => Total = Items.Sum(i => i.Subtotal);
-
-    private Order()
-    { }
 }

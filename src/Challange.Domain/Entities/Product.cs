@@ -1,3 +1,4 @@
+using Challange.Domain.Constants;
 using Challange.Domain.Exceptions;
 
 namespace Challange.Domain.Entities;
@@ -11,8 +12,9 @@ public class Product : BaseEntity
     public Product(string description, decimal unitPrice, int availableQuantity) : base()
     {
         DomainException.ThrowIf(string.IsNullOrWhiteSpace(description), "Description cannot be empty.");
-        DomainException.ThrowIf(unitPrice <= 0, "Unit price must be greater than zero.");
-        DomainException.ThrowIf(availableQuantity < 0, "Available quantity cannot be negative.");
+        DomainException.ThrowIf(description.Length > ProductConstants.MaxDescriptionLength, $"Description cannot exceed {ProductConstants.MaxDescriptionLength} characters.");
+        DomainException.ThrowIf(unitPrice < ProductConstants.MinUnitPrice, $"Unit price must be at least {ProductConstants.MinUnitPrice}.");
+        DomainException.ThrowIf(availableQuantity < ProductConstants.MinAvailableQuantity, $"Available quantity must be at least {ProductConstants.MinAvailableQuantity}.");
 
         Description = description;
         UnitPrice = unitPrice;
