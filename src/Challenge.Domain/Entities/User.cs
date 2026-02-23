@@ -29,7 +29,10 @@ public class User : BaseEntity
         UpdateTimestamps();
     }
 
+#pragma warning disable CS8618
+
     private User()
+#pragma warning restore CS8618
     {
     }
 }

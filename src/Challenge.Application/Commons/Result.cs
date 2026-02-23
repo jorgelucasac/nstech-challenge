@@ -11,7 +11,7 @@ public class Result
     public bool IsSuccess { get; }
     public Error Error { get; }
 
-    public static Result<T> Success<T>(T value) => new(true, value, null);
+    public static Result<T> Success<T>(T value) => new(true, value, default!);
 
     public static Result<T> Failure<T>(Error error) => new(false, default!, error);
 

@@ -56,6 +56,6 @@ public sealed class ValidationBehavior<TRequest, TResponse>
             .GetMethod(nameof(Result<object>.Validation),
                 new[] { typeof(string), typeof(List<KeyValuePair<string, string>>) });
 
-        return (TResponse)method.Invoke(null, new object[] { "Validation failed", details })!;
+        return (TResponse)method?.Invoke(null, new object[] { "Validation failed", details })!;
     }
 }

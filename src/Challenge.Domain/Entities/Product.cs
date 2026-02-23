@@ -38,6 +38,9 @@ public class Product : BaseEntity
         UpdateTimestamps();
     }
 
+#pragma warning disable CS8618
+
     private Product()
+#pragma warning restore CS8618
     { }
 }
