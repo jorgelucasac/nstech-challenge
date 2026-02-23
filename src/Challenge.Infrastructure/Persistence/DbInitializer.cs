@@ -1,5 +1,5 @@
+using Challenge.Application.Contracts.Services;
 using Challenge.Domain.Entities;
-using Challenge.Infrastructure.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +17,7 @@ public static class DbInitializer
             Console.WriteLine("Applying pending migrations...");
             await dbContext.Database.MigrateAsync(cancellationToken);
 
-            await SeedDataAsync(dbContext, cancellationToken);
+            await SeedDataAsync(dbContext, scope, cancellationToken);
         }
         catch (Exception e)
         {
@@ -25,16 +25,18 @@ public static class DbInitializer
         }
     }
 
-    private static async Task SeedDataAsync(AppDbContext dbContext, CancellationToken cancellationToken = default)
+    private static async Task SeedDataAsync(AppDbContext dbContext, IServiceScope scope, CancellationToken cancellationToken = default)
     {
         if (await dbContext.Users.AnyAsync(cancellationToken))
             return;
+
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasherService>();
 
         dbContext.Products.Add(new Product("Rice", 30m, 100));
         dbContext.Products.Add(new Product("Beans", 5.90m, 200));
         dbContext.Products.Add(new Product("Sugar", 10.50m, 500));
 
-        dbContext.Users.Add(new User("admin", new BCryptPasswordHasher().HashPassword("admin01")));
+        dbContext.Users.Add(new User("admin", passwordHasher.HashPassword("admin01")));
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
