@@ -1,6 +1,6 @@
  NSTech Challenge - Web API (.NET 10)
-pipeline: [![CI](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml)
-Este projeto implementa uma API REST para **autenticação de usuários** e **gestão de pedidos**, seguindo uma arquitetura em camadas (estilo Clean Architecture).
+ pipeline: [![CI](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml)
+ Este projeto implementa uma API REST para **autenticação de usuários** e **gestão de pedidos**, seguindo uma arquitetura em camadas (estilo Clean Architecture).
 
 ## Visão geral da arquitetura
 
