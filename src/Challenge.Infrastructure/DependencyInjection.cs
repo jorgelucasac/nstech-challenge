@@ -53,6 +53,7 @@ public static class DependencyInjection
             .Bind(jwtSettingsSection)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
         var jwtSettings = jwtSettingsSection.Get<JwtSettings>()!;
 
         var jwtKey = jwtSettings.Key;

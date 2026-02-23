@@ -14,17 +14,10 @@ public static class DbInitializer
 
         try
         {
-            //create the database if it doesn't exist and apply any pending migrations
-            if (!await dbContext.Database.CanConnectAsync(cancellationToken))
-            {
-                await dbContext.Database.EnsureCreatedAsync(cancellationToken);
-                await SeedDataAsync(dbContext, cancellationToken);
-            }
-            else
-            {
-                Console.WriteLine("Applying pending migrations...");
-                await dbContext.Database.MigrateAsync(cancellationToken);
-            }
+            Console.WriteLine("Applying pending migrations...");
+            await dbContext.Database.MigrateAsync(cancellationToken);
+
+            await SeedDataAsync(dbContext, cancellationToken);
         }
         catch (Exception e)
         {
