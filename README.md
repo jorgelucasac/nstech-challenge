@@ -141,8 +141,9 @@ docker compose logs -f postgres
 ### 3) Acessar a API e documentação
 
 - Base URL: `http://localhost:8080`
-- Swagger UI (quando habilitada no pipeline):
+- Swagger UI:
   - `http://localhost:8080/swagger`
+  - **Importante (token JWT):** no botão **Authorize** do Swagger, informe **apenas o token** (sem o prefixo `Bearer`). O próprio Swagger adiciona o prefixo automaticamente no header `Authorization`.
 
 ### 4) Encerrar ambiente
 
