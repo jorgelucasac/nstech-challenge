@@ -156,20 +156,6 @@ Para remover também o volume do banco de dados:
 docker compose down -v
 ```
 
-## Configuração de ambiente (resumo)
-
-No `docker-compose.yaml`, a API recebe:
-
-- `ASPNETCORE_URLS=http://+:8080`
-- `ASPNETCORE_ENVIRONMENT=Production`
-- `ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=nstech-challange;Username=nstech;Password=nstech123;`
-
-O banco recebe:
-
-- `POSTGRES_USER=nstech`
-- `POSTGRES_PASSWORD=nstech123`
-- `POSTGRES_DB=nstech-challange`
-
 ## Fluxo de autenticação (resumo)
 
 1. Registrar usuário em `POST /api/v1/auth/register`.
