@@ -30,7 +30,7 @@ public sealed class CreateOrderCommandHandler(
             if (products[item.ProductId].AvailableQuantity < item.Quantity)
             {
                 logger.LogWarning("CreateOrder failed: insufficient stock for product {ProductId}", item.ProductId);
-                errorDetails.Add(new KeyValuePair<string, string>(item.ProductId.ToString(), "Insufficient stock"));
+                errorDetails.Add(new(item.ProductId.ToString(), "Insufficient stock"));
             }
         }
 

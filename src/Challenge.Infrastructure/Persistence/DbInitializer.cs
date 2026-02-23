@@ -16,7 +16,6 @@ public static class DbInitializer
         {
             Console.WriteLine("Applying pending migrations...");
             await dbContext.Database.MigrateAsync(cancellationToken);
-
             await SeedDataAsync(dbContext, scope, cancellationToken);
         }
         catch (Exception e)
