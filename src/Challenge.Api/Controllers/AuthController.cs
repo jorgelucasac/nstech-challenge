@@ -1,4 +1,4 @@
-using Challenge.Application.Dtos;
+using Challenge.Api.Transport.Auth;
 using Challenge.Application.Features.Commands.Auth.GenerateToken;
 using Challenge.Application.Features.Commands.Auth.RegisterUser;
 using MediatR;
