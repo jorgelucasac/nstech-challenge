@@ -41,8 +41,6 @@ public abstract class IntegrationTestBase(PostgressContainerFixture db) : IAsync
 
     private async Task<string> AuthenticateAndGetTokenAsync()
     {
-        //foreach until status code is 200, because the application may not be ready yet
-
         var tokenResponse = await Client!.PostAsJsonAsync("api/v1/auth/token", new TokenRequest("admin", "admin01"));
 
         var body = await tokenResponse.Content.ReadFromJsonAsync<GenerateTokenResponse>();
