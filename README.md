@@ -41,6 +41,9 @@ Principais componentes:
 - `Middlewares/ErrorHandlingMiddleware`: tratamento global de exceções e retorno padronizado HTTP 500.
 - `Middlewares/CorrellationMiddleware`: gera/propaga `X-Correlation-Id` para rastreabilidade.
 
+<img width="1541" height="778" alt="image" src="https://github.com/user-attachments/assets/895f08f8-52ec-4009-a20e-d1bba418b874" />
+
+
 ### 2) Camada `Challenge.Application`
 
 Responsabilidades:
