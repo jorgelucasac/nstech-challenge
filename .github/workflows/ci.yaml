@@ -32,7 +32,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      # Se sua .sln estiver dentro de /src, troque para: ./src/nstech-challenge.sln
       - name: Restore
         run: dotnet restore ./nstech-challenge.sln
 
@@ -41,10 +40,3 @@ jobs:
 
       - name: Test
         run: dotnet test ./nstech-challenge.sln --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
-
-      - name: Upload test results (TRX)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-test-results
-          path: "**/test_results.trx"
