@@ -15,6 +15,12 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
             .FirstOrDefaultAsync(x => x.NormalizedLogin == normalized, cancellationToken);
     }
 
+    public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Users
+            .AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
     public async Task<bool> ExistsByLoginAsync(string login, CancellationToken cancellationToken)
     {
         var normalized = login.ToUpperInvariant();

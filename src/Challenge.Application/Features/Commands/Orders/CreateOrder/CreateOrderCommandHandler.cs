@@ -8,12 +8,20 @@ namespace Challenge.Application.Features.Commands.Orders.CreateOrder;
 public sealed class CreateOrderCommandHandler(
     IOrderRepository orderRepository,
     IProductRepository productRepository,
+    IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ILogger<CreateOrderCommandHandler> logger) : BaseHandler<CreateOrderCommand, OrderResponse>(logger)
 {
     public override async Task<Result<OrderResponse>> HandleAsync(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating order for customer {CustomerId} with {ItemCount} items", request.CustomerId, request.Items.Count);
+
+        var userExists = await userRepository.ExistsByIdAsync(request.CustomerId, cancellationToken);
+        if (!userExists)
+        {
+            logger.LogWarning("CreateOrder failed: customer {CustomerId} not found", request.CustomerId);
+            return Result.Validation<OrderResponse>("Customer not found.");
+        }
 
         var productIds = request.Items.Select(i => i.ProductId).Distinct().ToList();
         var products = await productRepository.GetByIdsAsync(productIds, cancellationToken);
@@ -40,7 +48,7 @@ public sealed class CreateOrderCommandHandler(
         }
 
         var order = new Order(request.CustomerId, request.Currency);
-        var orderItems = request.Items.Select(i => new OrderItem(i.ProductId, order.Id, products[i.ProductId].UnitPrice, i.Quantity));
+        var orderItems = request.Items.Select(i => new OrderItem(order.Id, i.ProductId, products[i.ProductId].UnitPrice, i.Quantity));
         order.AddItems(orderItems);
 
         await orderRepository.AddAsync(order, cancellationToken);
