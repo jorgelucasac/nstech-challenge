@@ -1,3 +1,4 @@
+using Challenge.Application.Features.Shared.Products;
 using Challenge.Domain.Entities;
 
 namespace Challenge.Application.Features.Queries.Products.ListProducts;

@@ -6,6 +6,11 @@ namespace Challenge.Infrastructure.Persistence.Repositories;
 
 public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {
+    public async Task AddAsync(Product product, CancellationToken cancellationToken)
+    {
+        await dbContext.Products.AddAsync(product, cancellationToken);
+    }
+
     public async Task<Dictionary<Guid, Product>> GetByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
     {
         var ids = productIds.Distinct().ToList();
