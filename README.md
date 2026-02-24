@@ -2,16 +2,16 @@
 
  PIPELINE: [![CI](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/jorgelucasac/nstech-challenge/actions/workflows/ci.yaml)
  
- Este projeto implementa uma API REST para **autenticação de usuários** e **gestão de pedidos**, seguindo uma arquitetura em camadas (estilo Clean Architecture).
+ Este projeto implementa uma API REST para **autenticaÃ§Ã£o de usuÃ¡rios** e **gestÃ£o de pedidos**, seguindo uma arquitetura em camadas (estilo Clean Architecture).
 
-## Visão geral da arquitetura
+## VisÃ£o geral da arquitetura
 
-A solução está dividida em quatro projetos principais:
+A soluÃ§Ã£o estÃ¡ dividida em quatro projetos principais:
 
-- **Challenge.Api**: camada de apresentação (HTTP), responsável por controllers, middlewares, versionamento e Swagger.
-- **Challenge.Application**: camada de aplicação, responsável por casos de uso, validações, DTOs e fluxo de comandos/queries.
-- **Challenge.Domain**: camada de domínio, com entidades, regras de negócio e exceções de domínio.
-- **Challenge.Infrastructure**: camada de infraestrutura, com acesso a dados (EF Core + PostgreSQL), autenticação JWT, hashing de senha e logging.
+- **Challenge.Api**: camada de apresentaÃ§Ã£o (HTTP), responsÃ¡vel por controllers, middlewares, versionamento e Swagger.
+- **Challenge.Application**: camada de aplicaÃ§Ã£o, responsÃ¡vel por casos de uso, validaÃ§Ãµes, DTOs e fluxo de comandos/queries.
+- **Challenge.Domain**: camada de domÃ­nio, com entidades, regras de negÃ³cio e exceÃ§Ãµes de domÃ­nio.
+- **Challenge.Infrastructure**: camada de infraestrutura, com acesso a dados (EF Core + PostgreSQL), autenticaÃ§Ã£o JWT, hashing de senha e logging.
 
 ## Camadas e responsabilidades
 
@@ -20,12 +20,12 @@ A solução está dividida em quatro projetos principais:
 Responsabilidades:
 
 - Expor endpoints REST (`/api/v{version}/auth` e `/api/v{version}/orders`).
-- Receber requests HTTP e mapear para comandos/queries da aplicação.
-- Configurar pipeline da aplicação:
+- Receber requests HTTP e mapear para comandos/queries da aplicaÃ§Ã£o.
+- Configurar pipeline da aplicaÃ§Ã£o:
   - versionamento da API;
   - Swagger/OpenAPI;
-  - middlewares customizados (correlação e tratamento global de erro);
-  - registro das dependências de Application e Infrastructure.
+  - middlewares customizados (correlaÃ§Ã£o e tratamento global de erro);
+  - registro das dependÃªncias de Application e Infrastructure.
 
 Principais componentes:
 
@@ -38,7 +38,7 @@ Principais componentes:
   - `POST /orders`
   - `POST /orders/{id}/confirm`
   - `POST /orders/{id}/cancel`
-- `Middlewares/ErrorHandlingMiddleware`: tratamento global de exceções e retorno padronizado HTTP 500.
+- `Middlewares/ErrorHandlingMiddleware`: tratamento global de exceÃ§Ãµes e retorno padronizado HTTP 500.
 - `Middlewares/CorrellationMiddleware`: gera/propaga `X-Correlation-Id` para rastreabilidade.
 
 ### 2) Camada `Challenge.Application`
@@ -46,71 +46,71 @@ Principais componentes:
 Responsabilidades:
 
 - Orquestrar casos de uso (sem depender de infraestrutura concreta).
-- Definir contratos (interfaces) de repositórios e serviços.
+- Definir contratos (interfaces) de repositÃ³rios e serviÃ§os.
 - Processar comandos e consultas via **MediatR**.
 - Validar entrada com **FluentValidation**.
 - Retornar resultados padronizados com `Result<T>` / `Error`.
 
 Principais blocos:
 
-- `Features/Commands`: fluxos de escrita (registro, token, criação/confirmação/cancelamento de pedidos).
+- `Features/Commands`: fluxos de escrita (registro, token, criaÃ§Ã£o/confirmaÃ§Ã£o/cancelamento de pedidos).
 - `Features/Queries`: fluxos de leitura (listar pedidos e buscar por ID).
-- `Contracts/Repositories` e `Contracts/Services`: abstrações para persistência e serviços externos.
-- `Behaviors/ValidationBehavior`: pipeline behavior para validação automática dos requests.
+- `Contracts/Repositories` e `Contracts/Services`: abstraÃ§Ãµes para persistÃªncia e serviÃ§os externos.
+- `Behaviors/ValidationBehavior`: pipeline behavior para validaÃ§Ã£o automÃ¡tica dos requests.
 
 ### 3) Camada `Challenge.Domain`
 
 Responsabilidades:
 
-- Modelar o núcleo de negócio com entidades e invariantes.
-- Centralizar regras de negócio e validações de domínio.
-- Evitar dependências de frameworks de infraestrutura.
+- Modelar o nÃºcleo de negÃ³cio com entidades e invariantes.
+- Centralizar regras de negÃ³cio e validaÃ§Ãµes de domÃ­nio.
+- Evitar dependÃªncias de frameworks de infraestrutura.
 
 Principais elementos:
 
 - Entidades: `User`, `Product`, `Order`, `OrderItem`.
 - Enum: `OrderStatus`.
-- Exceções e constantes de domínio para regras e limites.
+- ExceÃ§Ãµes e constantes de domÃ­nio para regras e limites.
 
 ### 4) Camada `Challenge.Infrastructure`
 
 Responsabilidades:
 
-- Implementar os contratos da camada de aplicação.
+- Implementar os contratos da camada de aplicaÃ§Ã£o.
 - Persistir dados com **Entity Framework Core** + **PostgreSQL**.
-- Configurar autenticação **JWT Bearer**.
+- Configurar autenticaÃ§Ã£o **JWT Bearer**.
 - Implementar hashing de senha e logging estruturado.
-- Aplicar migrações automaticamente na inicialização.
+- Aplicar migraÃ§Ãµes automaticamente na inicializaÃ§Ã£o.
 
 Principais componentes:
 
-- `Persistence/AppDbContext` + configurações de entidades (`Configurations/*`).
-- Repositórios concretos (`Repositories/*`).
+- `Persistence/AppDbContext` + configuraÃ§Ãµes de entidades (`Configurations/*`).
+- RepositÃ³rios concretos (`Repositories/*`).
 - `Auth/JwtTokenService` e `Auth/BCryptPasswordHasher`.
-- `Persistence/DbInitializer`: aplica migrações pendentes no startup.
+- `Persistence/DbInitializer`: aplica migraÃ§Ãµes pendentes no startup.
 
 ## Bibliotecas e tecnologias utilizadas
 
 ### API (`Challenge.Api`)
 
-- `Swashbuckle.AspNetCore`: documentação Swagger/OpenAPI.
+- `Swashbuckle.AspNetCore`: documentaÃ§Ã£o Swagger/OpenAPI.
 - `Asp.Versioning.Mvc` e `Asp.Versioning.Mvc.ApiExplorer`: versionamento de API.
 
-### Aplicação (`Challenge.Application`)
+### AplicaÃ§Ã£o (`Challenge.Application`)
 
-- `MediatR` + `MediatR.Extensions.Microsoft.DependencyInjection`: padrão mediator (commands/queries).
-- `FluentValidation.DependencyInjectionExtensions`: validações desacopladas por request.
+- `MediatR` + `MediatR.Extensions.Microsoft.DependencyInjection`: padrÃ£o mediator (commands/queries).
+- `FluentValidation.DependencyInjectionExtensions`: validaÃ§Ãµes desacopladas por request.
 - `Microsoft.Extensions.Logging.Abstractions`.
 
 ### Infraestrutura (`Challenge.Infrastructure`)
 
 - `Npgsql.EntityFrameworkCore.PostgreSQL`: provedor PostgreSQL para EF Core.
 - `Microsoft.EntityFrameworkCore.Design` e `Microsoft.EntityFrameworkCore.Tools`.
-- `Microsoft.AspNetCore.Authentication.JwtBearer`: autenticação com token JWT.
+- `Microsoft.AspNetCore.Authentication.JwtBearer`: autenticaÃ§Ã£o com token JWT.
 - `BCrypt.Net-Next`: hashing seguro de senhas.
 - `Serilog.AspNetCore`, `Serilog.Settings.Configuration`, `Serilog.Sinks.Console`: observabilidade/logging.
 
-## Pré-requisitos
+## PrÃ©-requisitos
 
 - **Docker** e **Docker Compose** instalados.
 - Porta `5432` livre (PostgreSQL) e porta `8080` livre (API).
@@ -125,14 +125,14 @@ Na raiz do projeto:
 docker compose up --build
 ```
 
-Isso irá subir:
+Isso irÃ¡ subir:
 
 - `postgres` (`postgres:16`) com banco `nstech-challange`.
 - `webapi` (build local a partir do `Dockerfile`) exposta em `http://localhost:8080`.
 
-### 2) Verificar saúde/subida
+### 2) Verificar saÃºde/subida
 
-Comandos úteis:
+Comandos Ãºteis:
 
 ```bash
 docker compose ps
@@ -140,12 +140,12 @@ docker compose logs -f webapi
 docker compose logs -f postgres
 ```
 
-### 3) Acessar a API e documentação
+### 3) Acessar a API e documentaÃ§Ã£o
 
 - Base URL: `http://localhost:8080`
 - Swagger UI:
   - `http://localhost:8080/swagger`
-  - **Importante (token JWT):** no botão **Authorize** do Swagger, informe **apenas o token** (sem o prefixo `Bearer`). O próprio Swagger adiciona o prefixo automaticamente no header `Authorization`.
+  - **Importante (token JWT):** no botÃ£o **Authorize** do Swagger, informe **apenas o token** (sem o prefixo `Bearer`). O prÃ³prio Swagger adiciona o prefixo automaticamente no header `Authorization`.
 
 ### 4) Encerrar ambiente
 
@@ -153,25 +153,34 @@ docker compose logs -f postgres
 docker compose down
 ```
 
-Para remover também o volume do banco de dados:
+Para remover tambÃ©m o volume do banco de dados:
 
 ```bash
 docker compose down -v
 ```
 
-## Fluxo de autenticação (resumo)
+## Credenciais iniciais
 
-1. Registrar usuário em `POST /api/v1/auth/register`.
-2. Gerar token em `POST /api/v1/auth/token`.
+A aplicaÃ§Ã£o jÃ¡ possui um usuÃ¡rio prÃ©-cadastrado:
+
+| Campo | Valor |
+|-------|-------|
+| **UsuÃ¡rio** | `admin` |
+| **Senha** | `admin01` |
+
+## Fluxo de autenticaÃ§Ã£o (resumo)
+
+1. Registrar usuÃ¡rio em `POST /api/v1/auth/register`.
+2. Gerar token em `POST /api/v1/auth/token` (ou utilizar as credenciais iniciais acima).
 3. Enviar `Authorization: Bearer <token>` para acessar endpoints protegidos de pedidos.
 
 ## Testes
 
-O repositório possui projeto de testes unitários em:
+O repositÃ³rio possui projeto de testes unitÃ¡rios em:
 
 - `tests/Challenge.UnitTests`
 
-Execução local (opcional):
+ExecuÃ§Ã£o local (opcional):
 
 ```bash
 dotnet test
