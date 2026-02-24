@@ -38,7 +38,9 @@ Principais componentes:
 - `Controllers/OrdersController` (com `[Authorize]`):
   - `GET /orders/{id}`
   - `GET /orders`
-  - `POST /orders`
+  - `POST /orders` 
+    - **Observação sobre criação de pedidos:** o payload inclui o `CustomerId` por exigência do contrato fornecido. Em um cenário ideal, esse identificador seria obtido diretamente do JWT autenticado.
+	
   - `POST /orders/{id}/confirm`
   - `POST /orders/{id}/cancel`
 - `Middlewares/ErrorHandlingMiddleware`: tratamento global de exceções e retorno padronizado HTTP 500.
@@ -179,7 +181,6 @@ A aplicação já possui um usuário pré-cadastrado:
 1. Registrar usuário em `POST /api/v1/auth/register`.
 2. Gerar token em `POST /api/v1/auth/token` (ou utilizar as credenciais iniciais acima).
 3. Enviar `Authorization: Bearer <token>` para acessar endpoints protegidos de pedidos.
-
 ## Testes
 
 O repositório possui projetos de testes unitários e integrados em:
