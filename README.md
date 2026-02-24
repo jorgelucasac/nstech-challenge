@@ -19,7 +19,7 @@ A solução está dividida em quatro projetos principais:
 
 Responsabilidades:
 
-- Expor endpoints REST (`/api/v{version}/auth` e `/api/v{version}/orders`).
+- Expor endpoints REST (`/api/v{version}/auth`, `/api/v{version}/products` e `/api/v{version}/orders`).
 - Receber requests HTTP e mapear para comandos/queries da aplicação.
 - Configurar pipeline da aplicação:
   - versionamento da API;
@@ -32,6 +32,9 @@ Principais componentes:
 - `Controllers/AuthController`:
   - `POST /auth/register`
   - `POST /auth/token`
+- `Controllers/ProductsController` (com `[Authorize]`):
+  - `GET /products`
+  - `POST /products`
 - `Controllers/OrdersController` (com `[Authorize]`):
   - `GET /orders/{id}`
   - `GET /orders`
@@ -179,9 +182,10 @@ A aplicação já possui um usuário pré-cadastrado:
 
 ## Testes
 
-O repositório possui projeto de testes unitários em:
+O repositório possui projetos de testes unitários e integrados em:
 
 - `tests/Challenge.UnitTests`
+- `tests/Challenge.IntegrationTest`
 
 Execução local (opcional):
 
