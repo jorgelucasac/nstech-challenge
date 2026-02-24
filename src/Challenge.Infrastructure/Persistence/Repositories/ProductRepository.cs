@@ -13,4 +13,24 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
             .Where(p => ids.Contains(p.Id))
             .ToDictionaryAsync(p => p.Id, cancellationToken);
     }
+
+    public async Task<(IReadOnlyList<Product> Products, int TotalCount)> ListAsync(string? name, int page, int pageSize, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Products
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(p => p.Description.Contains(name));
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var products = await query.OrderBy(p => p.Description)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (products, totalCount);
+    }
 }
