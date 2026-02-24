@@ -102,10 +102,9 @@ public class OrdersControllerTests(PostgressContainerFixture fixture) : Integrat
 
     private async Task<Guid> AuthorizeAndGetUserIdAsync()
     {
-        var token = await RegisterAndGetTokenAsync();
-        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", IntegrationTestBaseHelpers.Jwt);
         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(token);
+        var jwtToken = handler.ReadJwtToken(IntegrationTestBaseHelpers.Jwt);
         var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         userIdClaim.Should().NotBeNull("Token should contain a 'sub' claim with the user ID");
         return Guid.Parse(userIdClaim!.Value);

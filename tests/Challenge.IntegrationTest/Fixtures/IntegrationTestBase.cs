@@ -1,9 +1,7 @@
 ﻿using Challenge.Api.Transport.Auth;
 using Challenge.Application.Features.Commands.Auth.GenerateToken;
 using Challenge.Infrastructure.Persistence;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
 using System.Net.Http.Json;
 
 namespace Challenge.IntegrationTest.Fixtures;
@@ -16,12 +14,15 @@ public abstract class IntegrationTestBase(PostgressContainerFixture db) : IAsync
     protected CustomWebApplicationFactory? Factory;
     protected AppDbContext? TestDbContext;
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
         Factory = new CustomWebApplicationFactory(_db.ConnectionString);
         TestDbContext = Factory.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
         Client = Factory.CreateClient();
-        return Task.CompletedTask;
+        if (string.IsNullOrWhiteSpace(IntegrationTestBaseHelpers.Jwt))
+        {
+            IntegrationTestBaseHelpers.Jwt = await AuthenticateAndGetTokenAsync();
+        }
     }
 
     public async Task DisposeAsync()
@@ -38,27 +39,14 @@ public abstract class IntegrationTestBase(PostgressContainerFixture db) : IAsync
         }
     }
 
-    protected async Task<string> RegisterAndGetTokenAsync()
+    private async Task<string> AuthenticateAndGetTokenAsync()
     {
-        var login = $"user-{Guid.NewGuid():N}";
-        const string password = "Pass@12345";
-        var registerResponse = await Client!.PostAsJsonAsync("api/v1/auth/register", new RegisterUserRequest(login, password));
+        //foreach until status code is 200, because the application may not be ready yet
 
-        registerResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-
-        var tokenResponse = await Client!.PostAsJsonAsync("api/v1/auth/token", new TokenRequest(login, password));
-
-        tokenResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var tokenResponse = await Client!.PostAsJsonAsync("api/v1/auth/token", new TokenRequest("admin", "admin01"));
 
         var body = await tokenResponse.Content.ReadFromJsonAsync<GenerateTokenResponse>();
-        body.Should().NotBeNull();
-        body!.Token.Should().NotBeNullOrWhiteSpace();
 
-        return body.Token;
+        return body?.Token ?? string.Empty;
     }
-}
-
-[CollectionDefinition(nameof(DatabaseCollection))]
-public class DatabaseCollection : ICollectionFixture<PostgressContainerFixture>
-{
 }

@@ -32,6 +32,7 @@ public sealed class PostgressContainerFixture : IAsyncLifetime
         try
         {
             await _container.StartAsync();
+            await Task.Delay(5000);
         }
         catch
         {

@@ -14,8 +14,7 @@ public class ProductsControllerTests(PostgressContainerFixture fixture) : Integr
     [Fact]
     public async Task CreateAsync_ShouldReturnCreatedProduct()
     {
-        var token = await RegisterAndGetTokenAsync();
-        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", IntegrationTestBaseHelpers.Jwt);
 
         var request = new CreateProductRequest($"Product-{Guid.NewGuid():N}", 19.99m, 10);
         var response = await Client.PostAsJsonAsync("api/v1/products", request);
@@ -33,8 +32,7 @@ public class ProductsControllerTests(PostgressContainerFixture fixture) : Integr
     [Fact]
     public async Task ListAsync_ShouldReturnProducts()
     {
-        var token = await RegisterAndGetTokenAsync();
-        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        Client!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", IntegrationTestBaseHelpers.Jwt);
 
         var description = $"Product-{Guid.NewGuid():N}";
         var request = new CreateProductRequest(description, 10.50m, 5);
